@@ -1,0 +1,16 @@
+The arrow keys move the player around.
+
+As the player moves, it should face the correct direction and alternate between two sprites.
+When it hits a square, it should leave a footstep there.
+Footsteps should fade away over the course of 10 seconds.
+
+By changing the boolean chatting to true, you can preview the chat UI. It should display in
+the bottom left corner and by slightly transparent. You should be able to type any letter
+and use backspace to delete. When you press enter, the line should be entered into the chat
+window and fills from the bottom. When the window is full, new messages should push old
+messages off screen. Using the scroll up button and scroll down buttons, you should be able
+to navigate through this history.
+
+Run ServerRunner and ConnectionTestApplet to test connecting and the protocol. Each instance
+of ConnectionTestApplet should have a different port number, id, and a random starting 
+point.
