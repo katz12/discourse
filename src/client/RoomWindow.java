@@ -68,6 +68,26 @@ public class RoomWindow {
 		window[windowY][windowX] = newRoom;
 	}
 	
+	/**
+	 * isInWindow() tells if the given coordinate is inside the window.
+	 * 
+	 * @param x the x-coordinate
+	 * @param y the y-coordinate
+	 * @return true if it is
+	 */
+	public boolean isInWindow(int x, int y){
+		int centerXCoord = centerX * width;
+		int centerYCoord = centerY * height;
+		
+		if (x > centerXCoord + width * 1.5 || x < centerXCoord - width * 1.5)
+			return false;
+		
+		if (y > centerYCoord + height * 1.5 || y < centerYCoord - height * 1.5)
+			return false;
+		
+		return true;
+	}
+	
 	
 	
 	

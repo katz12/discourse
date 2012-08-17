@@ -355,8 +355,21 @@ public class ClientModel {
 	
 	
 	//-----------------------------------
-	//Other players finctions
+	//Other players functions
 	//-----------------------------------
+	
+	/**
+	 * isPlayerNearMe() checks to see if another player is near the player.
+	 * @return true if there is
+	 */
+	public boolean isPlayerNearMe(){
+		ArrayList<Sprite> others = getOthers();
+		for (Sprite s: others){
+			if(window.isInWindow(s.getX(), s.getY()))
+				return true;
+		}
+		return false;
+	}
 	
 	/**
 	 * getOthers() fetches an ArrayList of other players in the area.

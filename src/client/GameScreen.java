@@ -31,6 +31,11 @@ public class GameScreen implements Runnable{
 	static final int CHAT_WINDOW_LEFT = 10;
 	static final int TEXT_MARGIN = 20;
 	
+	static final int MUTE_TOP = 435;
+	static final int MUTE_LEFT = 580;
+	static final int MUTE_WIDTH = 47;
+	static final int MUTE_HEIGHT = 41;
+	
 	static final int SCROLL_UP_X1 = 276;
 	static final int SCROLL_UP_X2 = 308;
 	static final int SCROLL_UP_Y1 = 12;
@@ -47,9 +52,14 @@ public class GameScreen implements Runnable{
 	private Image tile;
 	private Image feet;
 	private Image chat;
+	private Image mute;
+	private Image unmute;
 	
 	private ClientModel model;
 	private CanvasDrawer drawer;
+	private GameMusic music;
+	
+	private boolean muted;
 	
 	private int width;
 	private int height;
@@ -80,7 +90,6 @@ public class GameScreen implements Runnable{
 	
 	private final int speed = 6;
 	private final int delay = 150;
-	
 
 	
 	public GameScreen(int myWidth, int myHeight, ClientModel myModel, CanvasDrawer myDrawer){
@@ -101,6 +110,13 @@ public class GameScreen implements Runnable{
 			
 			src = new File("tilenoborder-lit2.png");
 			feet = ImageIO.read(src);
+			
+			src = new File("sound-icon.png");
+			mute = ImageIO.read(src);
+			
+			src = new File("sound-icon-off.png");
+			unmute = ImageIO.read(src);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -112,10 +128,14 @@ public class GameScreen implements Runnable{
 		chatScroll = 0;
 		input = "";
 		
+		music = new GameMusic(model.isPlayerNearMe());
+		muted = false;
+		
 		ActionListener taskPerformer = new ActionListener() {
 			  public void actionPerformed(ActionEvent evt) {
 				if(model == null)
 					  return;
+				
 				
 			    if(getVirtualX(model.getPlayerX()) > width && model.getPlayerDirection() == Sprite.DIRECTION_RIGHT){
 			    	if(model.canPan(Sprite.DIRECTION_RIGHT)){
@@ -146,6 +166,8 @@ public class GameScreen implements Runnable{
 					updateFootsteps();
 				    drawer.repaint();
 			    }
+			    
+			    music.updateMusic(model.isPlayerNearMe());
 			  }
 			};
 
@@ -175,6 +197,7 @@ public class GameScreen implements Runnable{
 	public void paint(Graphics2D bufferGraphics){
 		drawBackground(bufferGraphics);
 		drawSprites(bufferGraphics);
+		drawMuteButton(bufferGraphics);
 		
 		if(model.canChat() && animator == null)
 			drawChatWindow(bufferGraphics);
@@ -269,6 +292,22 @@ public class GameScreen implements Runnable{
 		int offset = (input.length() < INPUT_LINE_SIZE) ? 0 : input.length() - INPUT_LINE_SIZE;
 		String output = "> " + input.substring(offset) + "_";
 		bufferGraphics.drawString(output, TEXT_MARGIN, CHAT_WINDOW_TOP + 11 * LINE_HEIGHT);
+	}
+	
+	private void drawMuteButton(Graphics2D bufferGraphics){
+		Image muteButton = (muted) ? unmute : mute;
+		bufferGraphics.drawImage(muteButton, MUTE_LEFT, MUTE_TOP, drawer);
+	}
+	
+	public void muteToggle(){
+		if (muted){
+			muted = false;
+			music.unmuteAll();
+		}
+		else{
+			muted = true;
+			music.muteAll();
+		}
 	}
 
 	/**

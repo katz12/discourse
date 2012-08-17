@@ -178,6 +178,7 @@ public class CanvasDrawer extends Canvas implements KeyListener, MouseListener{
 				if(!model.isPlayerMoving(Sprite.DIRECTION_DOWN))
 					model.startMoving(Sprite.DIRECTION_DOWN);
 			}
+			
 		}
 	}
 	
@@ -255,11 +256,15 @@ public class CanvasDrawer extends Canvas implements KeyListener, MouseListener{
 		
 		if(state == PLAYING){
 			
-			if(!model.canChat())
-				return;
-			
 			int xPos = m.getX();
 			int yPos = m.getY();
+			
+			if(xPos > GameScreen.MUTE_LEFT && xPos < GameScreen.MUTE_LEFT + GameScreen.MUTE_WIDTH &&
+					yPos > GameScreen.MUTE_TOP && yPos < GameScreen.MUTE_TOP + GameScreen.MUTE_HEIGHT)
+					game.muteToggle();
+			
+			if(!model.canChat())
+				return;
 			
 			if(xPos > GameScreen.CHAT_WINDOW_LEFT + GameScreen.SCROLL_UP_X1 && xPos < GameScreen.CHAT_WINDOW_LEFT + GameScreen.SCROLL_UP_X2 &&
 			   yPos > GameScreen.CHAT_WINDOW_TOP + GameScreen.SCROLL_UP_Y1 && yPos < GameScreen.CHAT_WINDOW_TOP + GameScreen.SCROLL_UP_Y2)
